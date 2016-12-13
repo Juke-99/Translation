@@ -1,0 +1,5 @@
+<html>
+	<body>
+		<p>こんにちは、{{name1}}{{name2}}さん</p>
+	</body>
+</html>
