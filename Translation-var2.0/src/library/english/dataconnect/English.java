@@ -1,17 +1,17 @@
 package library.english.dataconnect;
 
 public class English {
-	private String spell,meaning,pert_of_speech;
+	private String spell, meaning, pert_of_speech;
 	private int count;
 	
-	public English(String Spell,String Meaning,String Pert_of_speech){
-		this.spell=Spell;
-		this.meaning=Meaning;
-		this.pert_of_speech=Pert_of_speech;
+	public English(String spell, String meaning, String pert_of_speech) {
+		this.spell = spell;
+		this.meaning = meaning;
+		this.pert_of_speech = pert_of_speech;
 	}
 	
-	public void setCount(int Count){
-		this.count=Count;
+	public void setCount(int count){
+		this.count = count;
 	}
 	
 	public String getSpell(){

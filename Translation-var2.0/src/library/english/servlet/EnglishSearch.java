@@ -47,39 +47,34 @@ public class EnglishSearch extends HttpServlet {
 		//doGet(request, response);
 		request.setCharacterEncoding("utf8");
 		
-		String spell=request.getParameter("spell");
-		String pert=request.getParameter("pert_of");
-		int pert_of=Integer.parseInt(pert);
+		String spell = request.getParameter("spell");
+		String pert = request.getParameter("pert_of");
+		int pert_of = Integer.parseInt(pert);
 		
 		ArrayList<English> select1;
 		ArrayList<EnglishPhrase> select2;
-		EnglishWordDML search1=new EnglishWordDML();
-		EnglishPhraseWordDML search2=new EnglishPhraseWordDML();
-		UsedCounter countInstance=new UsedCounter();
+		EnglishWordDML search1 = new EnglishWordDML();
+		EnglishPhraseWordDML search2 = new EnglishPhraseWordDML();
+		UsedCounter countInstance = new UsedCounter();
 		
-		if(pert_of==11)
-		{	
-			select2=search2.selectPhrase(spell);
+		if(pert_of == 11) {	
+			select2 = search2.selectPhrase(spell);
 			countInstance.EnglishPhraseCounter(spell);
 			
-			if(select2.isEmpty())
-			{
-				request.setAttribute("search_zero","検索項目に引っかかりませんでした");
+			if(select2.isEmpty()) {
+				request.setAttribute("search_zero", "検索項目に引っかかりませんでした");
 			}
 			
-			request.setAttribute("search_result_ph",select2);
-		}
-		else
-		{		
-			select1=search1.select(spell);
+			request.setAttribute("search_result_ph", select2);
+		} else {		
+			select1 = search1.select(spell);
 			countInstance.EnglishPhraseCounter(spell);
 			
-			if(select1.isEmpty())
-			{
-				request.setAttribute("search_zero","検索項目に引っかかりませんでした");
+			if(select1.isEmpty()) {
+				request.setAttribute("search_zero", "検索項目に引っかかりませんでした");
 			}
 			
-			request.setAttribute("search_result",select1);
+			request.setAttribute("search_result", select1);
 		}
 		
 		request.getRequestDispatcher("Home.jsp").forward(request,response);

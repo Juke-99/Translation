@@ -2,11 +2,11 @@ package library.english.dataconnect;
 
 
 public class EnglishPhrase {
-	private String spell,meaning;
+	private String spell, meaning;
 	
-	public EnglishPhrase(String Spell,String Meaning){
-		this.spell=Spell;
-		this.meaning=Meaning;
+	public EnglishPhrase(String spell, String meaning) {
+		this.spell = spell;
+		this.meaning = meaning;
 	}
 	
 	public String getSpell(){

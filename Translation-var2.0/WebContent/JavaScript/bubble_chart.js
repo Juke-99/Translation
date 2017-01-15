@@ -52,5 +52,5 @@ d3.csv("./CSV/english.csv", function(d) {
       .text(function(d) { return d; });
 
   node.append("title")
-      .text(function(d) { return d.spell + "\n" + format(d.count); });
+      .text(function(d) { return d.spell; });
 });

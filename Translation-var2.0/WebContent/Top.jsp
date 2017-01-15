@@ -53,7 +53,6 @@
 			<nav>
 				<div class="navige">メニュー</div>
 				<div class="subnavige">
-					<p>ログアウト</p>
 					<p><a href="./BubbleChart.jsp">グラフ</a></p>
 				</div>
 			</nav>

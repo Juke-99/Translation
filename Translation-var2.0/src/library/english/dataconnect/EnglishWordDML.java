@@ -7,54 +7,48 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EnglishWordDML extends DataConnection implements DataSQLDML{
+public class EnglishWordDML extends DataConnection implements DataSQLDML {
 
-	private String SQL;
+	private String sql;
 	
 	@Override
-	public Connection getConnection(){
+	public Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
-			return DriverManager.getConnection("jdbc:mysql://localhost/translation?charactorEncoding=utf8","root","u");
-		}
-		catch (ClassNotFoundException e) {
+			return DriverManager.getConnection("jdbc:mysql://localhost/translation?charactorEncoding=utf8", "root", "u");
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			return null;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	@Override
 	public ArrayList<English> select(String spell) {
 		String[] word = spell.split("[ 　]+", 0);
-		String spe,mean,pert;
-		SQL="select spell,meaning,pert_of_speechname from English en inner join pert_of_speech pos on en.pert_of_speechid=pos.pert_of_speechid where en.spell like ?";
+		String spe, mean, pert;
+		sql = "SELECT spell,meaning,pert_of_speechname FROM English en INNER JOIN pert_of_speech pos ON en.pert_of_speechid=pos.pert_of_speechid WHERE en.spell LIKE ?";
 		ArrayList<English> list=new ArrayList<English>();
 		
-		try
-		(
-			Connection con=getConnection();
+		try	(
+			Connection con = getConnection();
 		){
-			if(word.length>1)
-			{
-				for(int j=1;j<word.length;j++)
-				{
-					SQL+=" or spell like ?";
+			if(word.length > 1) {
+				for(int j = 1; j < word.length; j++) {
+					sql += " OR spell LIKE ?";
 				}
 			}
 			
-			PreparedStatement ps=con.prepareStatement(SQL);
+			PreparedStatement ps = con.prepareStatement(sql);
 			
-			for(int i=0;i<word.length;i++)
+			for(int i = 0; i < word.length; i++)
 			{
-				ps.setString(i+1,word[i]);
+				ps.setString(i + 1, word[i]);
 			}
 			
-			ResultSet rs=ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next())
 			{
@@ -62,7 +56,7 @@ public class EnglishWordDML extends DataConnection implements DataSQLDML{
 				mean=rs.getString("meaning");
 				pert=rs.getString("pert_of_speechname");
 				
-				list.add(new English(spe,mean,pert));
+				list.add(new English(spe, mean, pert));
 			}
 		}
 		catch(SQLException e){
@@ -74,20 +68,19 @@ public class EnglishWordDML extends DataConnection implements DataSQLDML{
 
 	@Override
 	public int insert(String spell, String meaning, int pert) {
-		int count=0;
-		SQL="insert into English(spell,meaning,pert_of_speechid) values(?,?,?)";
+		int count = 0;
+		sql = "INSERT INTO English(spell,meaning,pert_of_speechid) VALUES(?,?,?)";
 		
 		try(
 			Connection connection=getConnection();
-			PreparedStatement ps=connection.prepareStatement(SQL);
+			PreparedStatement ps=connection.prepareStatement(sql);
 		){
-			ps.setString(1,spell);
-			ps.setString(2,meaning);
-			ps.setInt(3,pert);
+			ps.setString(1, spell);
+			ps.setString(2, meaning);
+			ps.setInt(3, pert);
 			
-			count=ps.executeUpdate();
-		}
-		catch(SQLException e){
+			count = ps.executeUpdate();
+		} catch(SQLException e) {
 			SQLExceptionMessage(e);
 		}
 		
@@ -96,22 +89,20 @@ public class EnglishWordDML extends DataConnection implements DataSQLDML{
 
 	@Override
 	public int update(String spell, String meaning, int pert) {
-		int count=0;
-		SQL="update English en inner join pert_of_speech pos on en.pert_of_speechid=pos.pert_of_speechid set meaning=?,en.pert_of_speechid=? where spell=? and en.pert_of_speechid=?";
+		int count = 0;
+		sql = "UPDATE English en INNER JOIN pert_of_speech pos ON en.pert_of_speechid=pos.pert_of_speechid SET meaning=?,en.pert_of_speechid=? WHERE spell=? AND en.pert_of_speechid=?";
 		
-		try
-		(
-			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement(SQL);
+		try (
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 		){
-			ps.setString(1,meaning);
-			ps.setInt(2,pert);
-			ps.setString(3,spell);
-			ps.setInt(4,pert);
+			ps.setString(1, meaning);
+			ps.setInt(2, pert);
+			ps.setString(3, spell);
+			ps.setInt(4, pert);
 			
-			count=ps.executeUpdate();
-		}
-		catch(SQLException e){
+			count = ps.executeUpdate();
+		} catch(SQLException e){
 			SQLExceptionMessage(e);
 		}
 		
@@ -120,28 +111,20 @@ public class EnglishWordDML extends DataConnection implements DataSQLDML{
 
 	@Override
 	public int delete(String spell) {
-		int count=0;
-		SQL="delete from English where spell=?";
+		int count = 0;
+		sql = "DELETE FROM English WHERE spell=?";
 		
-		try
-		(
-			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement(SQL);
+		try (
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 		){
-			ps.setString(1,spell);
+			ps.setString(1, spell);
 			
-			count=ps.executeUpdate();
-		}
-		catch(SQLException e){
+			count = ps.executeUpdate();
+		} catch(SQLException e){
 			SQLExceptionMessage(e);
 		}
 		
 		return count;
-	}
-
-	@Override
-	public ArrayList<EnglishPhrase> selectPhrase(String spell) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
 	}
 }

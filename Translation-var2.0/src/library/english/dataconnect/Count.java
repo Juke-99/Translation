@@ -1,10 +1,10 @@
 package library.english.dataconnect;
 
 public class Count {
-private int count;
+	private int count;
 	
 	public Count(int count){
-		this.count=count;
+		this.count = count;
 	}
 	
 	public int getCount(){

@@ -7,59 +7,44 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EnglishPhraseWordDML extends DataConnection implements DataSQLDML{
+public class EnglishPhraseWordDML extends DataConnection implements DataSQLDML {
 
-	private String SQL;
+	private String sql;
 	
 	@Override
-	protected Connection getConnection() throws ClassNotFoundException, SQLException {
+	protected Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
-			return DriverManager.getConnection("jdbc:mysql://localhost/translation?charactorEncoding=utf8","root","u");
-		}
-		catch (ClassNotFoundException e) {
+			return DriverManager.getConnection("jdbc:mysql://localhost/translation?charactorEncoding=utf8", "root", "u");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	@Override
-	public ArrayList<English> select(String spell) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
 	}
 
-	@Override
 	public ArrayList<EnglishPhrase> selectPhrase(String spell) {
-		String spe,mean;
-		SQL="select spell,meaning from phrase where spell like ?";
-		ArrayList<EnglishPhrase> list=new ArrayList<EnglishPhrase>();
+		String spe, mean;
+		sql = "SELECT spell,meaning FROM phrase WHERE spell LIKE ?";
+		ArrayList<EnglishPhrase> list = new ArrayList<EnglishPhrase>();
 		
-		try
-		(
-			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement(SQL);
+		try(
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 		){
-			ps.setString(1,spell+"%");
-			ResultSet rs=ps.executeQuery();
+			ps.setString(1, spell + "%");
+			ResultSet rs = ps.executeQuery();
 			
-			while(rs.next())
-			{
-				spe=rs.getString("spell");
-				mean=rs.getString("meaning");
+			while(rs.next()) {
+				spe = rs.getString("spell");
+				mean = rs.getString("meaning");
 				
 				list.add(new EnglishPhrase(spe,mean));
 			}
-		}
-		catch(SQLException e){
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e){
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -68,23 +53,40 @@ public class EnglishPhraseWordDML extends DataConnection implements DataSQLDML{
 
 	@Override
 	public int insert(String spell, String meaning, int pert) {
-		int count=0;
-		SQL="insert into Phrase(spell,meaning) values(?,?)";
+		int count = 0;
+		sql="INSERT INTO Phrase(spell,meaning) VALUES(?,?)";
 		
-		try
-		(
-			Connection con=getConnection();
-			PreparedStatement ps=con.prepareStatement(SQL);
+		try	(
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
 		){
-			ps.setString(1,spell);
-			ps.setString(2,meaning);
+			ps.setString(1, spell);
+			ps.setString(2, meaning);
 			
-			count=ps.executeUpdate();
-		}
-		catch(SQLException e){
+			count = ps.executeUpdate();
+		} catch(SQLException e) {
 			SQLExceptionMessage(e);
 		}
-		catch(ClassNotFoundException e){
+		
+		return count;
+	}
+
+	@Override
+	public int update(String spell, String meaning, int pert_of) {
+		int count=0;
+		sql = "UPDATE English en INNER JOIN pert_of_speech pos ON en.pert_of_speechid=pos.pert_of_speechid SET meaning=?,en.pert_of_speechid=? WHERE spell=? AND en.pert_of_speechid=?";
+		
+		try(
+			Connection con = getConnection();
+			PreparedStatement ps = con.prepareStatement(sql);
+		){
+			ps.setString(1, meaning);
+			ps.setInt(2, pert_of);
+			ps.setString(3, spell);
+			ps.setInt(4, pert_of);
+			
+			count = ps.executeUpdate();
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
@@ -92,14 +94,21 @@ public class EnglishPhraseWordDML extends DataConnection implements DataSQLDML{
 	}
 
 	@Override
-	public int update(String spell, String meaning, int pert) {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
-	}
-
-	@Override
 	public int delete(String spell) {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
+		int count=0;
+		sql = "DELETE FROM English WHERE spell=?";
+		
+		try	(
+			Connection con=getConnection();
+			PreparedStatement ps=con.prepareStatement(sql);
+		){
+			ps.setString(1,spell);
+			
+			count=ps.executeUpdate();
+		} catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		
+		return count;
 	}
 }

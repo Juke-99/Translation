@@ -22,15 +22,12 @@ public class EnglishInsert extends HttpServlet {
      */
     public EnglishInsert() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		request.setCharacterEncoding("utf-8");
 	}
 
@@ -38,31 +35,25 @@ public class EnglishInsert extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//doGet(request, response);
 		request.setCharacterEncoding("utf-8");
 		
-		String spell=request.getParameter("spell");
-		String meaning=request.getParameter("imi");
-		String pert=request.getParameter("pert_of");
-		int pert_of=Integer.parseInt(pert);
+		String spell = request.getParameter("spell");
+		String meaning = request.getParameter("imi");
+		String pert = request.getParameter("pert_of");
+		int pert_of = Integer.parseInt(pert);
 		int count;
 		
-		EnglishWordDML insert1=new EnglishWordDML();
-		EnglishPhraseWordDML insert2=new EnglishPhraseWordDML();
+		EnglishWordDML insert1 = new EnglishWordDML();
+		EnglishPhraseWordDML insert2 = new EnglishPhraseWordDML();
 		
-		if(pert_of==11)
-		{
-			count=insert2.insert(spell,meaning,0);
-		}
-		else
-		{
-			count=insert1.insert(spell,meaning,pert_of);
+		if(pert_of == 11) {
+			count = insert2.insert(spell, meaning, 0);
+		} else {
+			count = insert1.insert(spell, meaning, pert_of);
 		}
 		
-		if(count==0)
-		{
-			request.setAttribute("insertError","どちらかの入力項目が間違っています");
+		if(count == 0) {
+			request.setAttribute("insertError", "どちらかの入力項目が間違っています");
 		}
 		
 		request.getRequestDispatcher("Home.jsp").forward(request, response);
